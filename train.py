@@ -19,9 +19,10 @@ os.environ['TORCH_HOME'] = "C:/Users/Raytrack/Desktop/mxq-2.29/"
 if __name__ == '__main__':
     # parse CLI arguments
     parser = argparse.ArgumentParser()
+    parser.add_argument("--modeltype", type=str, default="DB", help="['DB']DB ['UNET']UNET")
     parser.add_argument("--n_epochs", type=int, default=60, help="number of epochs of training")
     parser.add_argument("--resume_epoch", type=int, default=1, help="epoch to resume training")  # 重载训练，从之前中断处接着
-    parser.add_argument("--batch_size", type=int, default=6, help="size of the batches")
+    parser.add_argument("--batchsize", type=int, default=6, help="size of the batches")
 
     parser.add_argument("--optimizer", type=str, default="adam", help="['adam']adam ['sgd']sgd")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
@@ -77,7 +78,7 @@ if __name__ == '__main__':
 
     dataloader = DataLoader(
         train_set,  
-        batch_size=opt.batch_size,
+        batch_size=opt.batchsize,
         shuffle=True,
         num_workers=opt.n_cpu,  
         drop_last=False
