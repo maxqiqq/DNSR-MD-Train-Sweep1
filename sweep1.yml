@@ -1,0 +1,29 @@
+# The program to run
+program: train.py
+
+# Grid, random or bayes
+method: bayes
+
+# Project this sweep is part of
+project:  DNSR-MaterialData-sweep1
+
+# Metric to optimize
+metric:
+  name: main/val_rmse
+  goal: minimize
+
+# Parameters space to search
+parameters:
+  optimizer:                              
+    values: ['adam', 'sgd']
+  lr:
+    values: [0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]  
+  batch_size: 
+    values: [2, 4, 6]
+  n_epochs:
+    value: 40
+
+
+
+
+
