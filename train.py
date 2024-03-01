@@ -1,6 +1,7 @@
 import argparse
 import torch
 from dconv_model import DistillNet
+from UNet import UNetTranslator
 from ImageLoaders import PairedImageSet
 from loss import PerceptualLossModule
 from torch.optim.lr_scheduler import MultiStepLR  
