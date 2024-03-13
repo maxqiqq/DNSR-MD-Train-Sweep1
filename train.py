@@ -125,6 +125,10 @@ if __name__ == '__main__':
             gt = B_img.type(Tensor)
             mask = AB_mask.type(Tensor)
 
+            print("Input resolution:", inp.shape)
+            print("Ground truth resolution:", gt.shape)
+            print("Mask resolution:", mask.shape)
+
             # 将每个块送入网络模型进行训练,输出结果      
             optimizer_G.zero_grad()
             out = translator(inp, mask) # mask计算中使用的otsu方法计算阴影遮罩mask不太靠谱吧。。。。
