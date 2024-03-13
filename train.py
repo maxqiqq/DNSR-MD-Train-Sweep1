@@ -14,7 +14,7 @@ from torchvision import transforms
 import numpy as np
 import wandb
 
-os.environ['TORCH_HOME'] = "C:/Users/Raytrack/Desktop/mxq-2.29/"
+os.environ['TORCH_HOME'] = "./loaded_models/"
 
 if __name__ == '__main__':
     # parse CLI arguments
