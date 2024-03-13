@@ -23,8 +23,8 @@ if __name__ == '__main__':
     parser.add_argument("--resume_epoch", type=int, default=1, help="epoch to resume training")  # 重载训练，从之前中断处接着
     parser.add_argument("--batchsize", type=int, default=1, help="size of the batches")
 
-    parser.add_argument("--img_height", type=int, default=512, help="size of image sent to DNSR")
-    parser.add_argument("--img_width", type=int, default=512, help="size of image sent to DNSR")
+    parser.add_argument("--img_height", type=int, default=1024, help="size of image sent to DNSR")
+    parser.add_argument("--img_width", type=int, default=1024, help="size of image sent to DNSR")
 
     parser.add_argument("--optimizer", type=str, default="adam", help="['adam']adam ['sgd']sgd")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
@@ -174,9 +174,9 @@ if __name__ == '__main__':
 
                     if idx % opt.save_checkpoint == 0 and idx > 0:
                         out_img = transforms.ToPILImage()(out[0])
-                        inp_img = transforms.ToPILImage()(inp[0])
+                        gt_img = transforms.ToPILImage()(gt[0])
                         wandb.log({"prediction_epoch{}_{}".format(epoch, idx): [wandb.Image(out_img)]})
-                        wandb.log({"orig_epoch{}_{}".format(epoch, idx): [wandb.Image(inp_img)]})
+                        wandb.log({"gt_epoch{}_{}".format(epoch, idx): [wandb.Image(gt_img)]})
                                     
                     synthetic_mask = compute_shadow_mask_otsu(inp, out.clone().detach())
                     mask_loss = criterion_pixelwise(synthetic_mask, mask)
