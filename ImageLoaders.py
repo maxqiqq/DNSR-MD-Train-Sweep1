@@ -2,6 +2,7 @@ import os
 import torchvision
 import torch.utils.data as data
 import torchvision.transforms as transforms
+from torchvision.transforms import InterpolationMode
 from PIL import Image
 from utils import compute_loader_otsu_mask
 
@@ -16,6 +17,11 @@ class PairedImageSet(data.Dataset):
         self.masks_path = []
         self.inp_images_path = []
         self.num_samples = 0
+
+        if size is not None:
+            self.resize = transforms.Resize(self.size, interpolation=InterpolationMode.BICUBIC)
+        else:
+            self.resize = None
 
         for dirpath, dnames, fnames \
                 in os.walk("{}/{}/{}_A/".format(set_path, set_type, set_type)):
