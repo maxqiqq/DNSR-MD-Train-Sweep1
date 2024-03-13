@@ -1,7 +1,6 @@
 import argparse
 import torch
 from dconv_model import DistillNet
-from UNet import UNetTranslator
 from ImageLoaders import PairedImageSet
 from loss import PerceptualLossModule
 from torch.optim.lr_scheduler import MultiStepLR  
@@ -20,10 +19,12 @@ os.environ['TORCH_HOME'] = "C:/Users/Raytrack/Desktop/mxq-2.29/"
 if __name__ == '__main__':
     # parse CLI arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--modeltype", type=str, default="DB", help="['DB']DB ['UNET']UNET")
-    parser.add_argument("--n_epochs", type=int, default=60, help="number of epochs of training")
+    parser.add_argument("--n_epochs", type=int, default=300, help="number of epochs of training")
     parser.add_argument("--resume_epoch", type=int, default=1, help="epoch to resume training")  # 重载训练，从之前中断处接着
     parser.add_argument("--batchsize", type=int, default=6, help="size of the batches")
+
+    parser.add_argument("--img_height", type=int, default=800, help="size of image sent to DNSR")
+    parser.add_argument("--img_width", type=int, default=800, help="size of image sent to DNSR")
 
     parser.add_argument("--optimizer", type=str, default="adam", help="['adam']adam ['sgd']sgd")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
@@ -74,8 +75,10 @@ if __name__ == '__main__':
    
     Tensor = torch.cuda.FloatTensor
 
-    train_set = PairedImageSet('C:/Users/Raytrack/Desktop/mxq-2.29/MaterialData-sweep', 'train', use_mask=False, aug=False)
-    val_set = PairedImageSet('C:/Users/Raytrack/Desktop/mxq-2.29/MaterialData-sweep', 'validation', use_mask=False, aug=False)
+    train_set = PairedImageSet('C:/Users/Raytrack/Desktop/mxq-2.29/MaterialData-sweep', 'train', use_mask=False, 
+                               size=(opt.img_height, opt.img_width), aug=False)
+    val_set = PairedImageSet('C:/Users/Raytrack/Desktop/mxq-2.29/MaterialData-sweep', 'validation', use_mask=False, 
+                             size=(opt.img_height, opt.img_width), aug=False)
 
     dataloader = DataLoader(
         train_set,  
@@ -122,17 +125,21 @@ if __name__ == '__main__':
             AB_mask = AB_mask.to(device)
             A_img = A_img.to(device)
 
-            # 将图像分割为16个512x512块
-            for m in range(4):
-                for n in range(4):
-                    left = n * 512
-                    upper = m * 512
-                    right = (n + 1) * 512
-                    lower = (m + 1) * 512
+            # # 将图像分割为16个512x512块
+            # for m in range(4):
+            #     for n in range(4):
+            #         left = n * 512
+            #         upper = m * 512
+            #         right = (n + 1) * 512
+            #         lower = (m + 1) * 512
 
-                    gt = B_img[:, :, upper:lower, left:right]
-                    mask = AB_mask[:, :, upper:lower, left:right]
-                    inp = A_img[:, :, upper:lower, left:right]
+                    # gt = B_img[:, :, upper:lower, left:right]
+                    # mask = AB_mask[:, :, upper:lower, left:right]
+                    # inp = A_img[:, :, upper:lower, left:right]
+
+            inp = Variable(A_img.type(Tensor))
+            gt = Variable(B_img.type(Tensor))
+            mask = Variable(AB_mask.type(Tensor))
 
                     # 将每个块送入网络模型进行训练,输出结果      
                     optimizer_G.zero_grad()
