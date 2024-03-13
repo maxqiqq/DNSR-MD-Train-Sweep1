@@ -173,7 +173,8 @@ if __name__ == '__main__':
                         out = translator(inp, mask)
 
                     if idx % opt.save_checkpoint == 0 and idx > 0:
-                        out_numpy = out.detach().cpu().numpy().transpose(1, 2, 0)
+                        out_numpy = out.detach().cpu().numpy()
+                        out_numpy = out_numpy.permute(1, 2, 0)
                         out_numpy = np.clip(out_numpy, 0, 1)
                         out_image = Image.fromarray((out_numpy * 255).astype(np.uint8))
                         img_name = os.path.splitext(os.path.basename(B_img))[0]
