@@ -7,7 +7,7 @@ from PIL import Image
 from utils import compute_loader_otsu_mask
 
 class PairedImageSet(data.Dataset):
-    def __init__(self, set_path, set_type, use_mask, size=, aug):
+    def __init__(self, set_path, set_type, use_mask, size, aug):
         self.augment = aug
         self.size = size
         self.use_mask = use_mask
@@ -43,9 +43,9 @@ class PairedImageSet(data.Dataset):
         smat_data = compute_loader_otsu_mask(inp_data, gt_data)
 
         if self.resize is not None:
-                gt_data = self.resize(gt_data)
-                smat_data = self.resize(smat_data)
-                inp_data = self.resize(inp_data)
+            gt_data = self.resize(gt_data)
+            smat_data = self.resize(smat_data)
+            inp_data = self.resize(inp_data)
 
         tensor_gt = self.to_tensor(gt_data)
         tensor_msk = self.to_tensor(smat_data)
