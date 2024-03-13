@@ -123,9 +123,9 @@ if __name__ == '__main__':
             gt = B_img.type(Tensor)
             mask = AB_mask.type(Tensor)
 
-            print("Input resolution:", inp.shape)
-            print("Ground truth resolution:", gt.shape)
-            print("Mask resolution:", mask.shape)
+            # print("Input resolution:", inp.shape)
+            # print("Ground truth resolution:", gt.shape)
+            # print("Mask resolution:", mask.shape)
 
             # 将每个块送入网络模型进行训练,输出结果      
             optimizer_G.zero_grad()
@@ -173,8 +173,9 @@ if __name__ == '__main__':
                         out = translator(inp, mask)
 
                     if idx % opt.save_checkpoint == 0 and idx > 0:
-                        out_numpy = out.detach().cpu().numpy()
-                        out_image = wandb.Image(out_numpy)
+                        out_numpy = out.detach().cpu().numpy().transpose(1, 2, 0)
+                        out_numpy = np.clip(out_numpy, 0, 1)
+                        out_image = Image.fromarray((out_numpy * 255).astype(np.uint8))
                         img_name = os.path.splitext(os.path.basename(B_img))[0]
                         wandb.log({"prediction_epoch{}_{}".format(epoch, img_name): [wandb.Image(out_image)]})
                                     
