@@ -6,8 +6,9 @@ from PIL import Image
 from utils import compute_loader_otsu_mask
 
 class PairedImageSet(data.Dataset):
-    def __init__(self, set_path, set_type, use_mask, aug):
+    def __init__(self, set_path, set_type, use_mask, size, aug):
         self.augment = aug
+        self.size = size
         self.use_mask = use_mask
         self.to_tensor = transforms.ToTensor()
         clean_path_dir = '{}/{}/{}_C'.format(set_path, set_type, set_type)
