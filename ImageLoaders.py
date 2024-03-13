@@ -21,7 +21,8 @@ class PairedImageSet(data.Dataset):
                 in os.walk("{}/{}/{}_A/".format(set_path, set_type, set_type)):
             for f in fnames:
                 orig_path = os.path.join(dirpath, f)
-                clean_path = os.path.join(clean_path_dir, f[:3] + "_BaseColor.jpg")
+                clean_path = os.path.join(clean_path_dir, os.path.splitext(f)[0] + '.jpg')
+                # clean_path = os.path.join(clean_path_dir, f[:3] + "_BaseColor.jpg")
                 # _A应该是input图像文件夹，但有一个input就有一个gt，所以也在clean路径中添加一个，同时注意格式为jpg
                 self.gt_images_path.append(clean_path)
                 self.inp_images_path.append(orig_path)
