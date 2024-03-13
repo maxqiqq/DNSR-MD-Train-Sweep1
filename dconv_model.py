@@ -122,7 +122,7 @@ class SCAM(nn.Module):
     def forward(self, x_l, x_r):
         Q_l = self.l_proj1(self.norm_l(x_l)).permute(0, 2, 3, 1)  # B, H, W, c 左=中间DistillBlock曝光调整出来的结果=查询，假设为想要查询的关键词
         # x_l分辨率&通道数532 256
-        Q_r_T = self.r_proj1(self.norm_r(x_r)).permute(0, 2, 3, 1)  # B, H, c, W 右=跳跃连接EncoderBlock出来的特征图=键，用于帮助定位到含关键词的所有部分（包含想要和不想要的所有部分）
+        Q_r_T = self.r_proj1(self.norm_r(x_r)).permute(0, 2, 1, 3)  # B, H, c, W 右=跳跃连接EncoderBlock出来的特征图=键，用于帮助定位到含关键词的所有部分（包含想要和不想要的所有部分）
         # x_r分辨率&通道数32 256
 
         V_l = self.l_proj2(x_l).permute(0, 2, 3, 1)  # B, H, W, c 值，与查询/关键词相关的实际内容
