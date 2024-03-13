@@ -121,9 +121,9 @@ if __name__ == '__main__':
         translator = translator.train()
 
         for i, (B_img, AB_mask, A_img) in enumerate(dataloader):
-            inp = Variable(A_img.type(Tensor))
-            gt = Variable(B_img.type(Tensor))
-            mask = Variable(AB_mask.type(Tensor))
+            inp = A_img.type(Tensor)
+            gt = B_img.type(Tensor)
+            mask = AB_mask.type(Tensor)
 
             # 将每个块送入网络模型进行训练,输出结果      
             optimizer_G.zero_grad()
@@ -163,9 +163,9 @@ if __name__ == '__main__':
                 translator = translator.eval()
 
                 for idx, (B_img, AB_mask, A_img) in enumerate(val_dataloader):
-                    inp = Variable(A_img.type(Tensor))
-                    gt = Variable(B_img.type(Tensor))
-                    mask = Variable(AB_mask.type(Tensor))                    
+                    inp = A_img.type(Tensor)
+                    gt = B_img.type(Tensor)
+                    mask = AB_mask.type(Tensor)                  
                     
                     with torch.autocast(device_type="cuda", dtype=torch.float16):
                         out = translator(inp, mask)
