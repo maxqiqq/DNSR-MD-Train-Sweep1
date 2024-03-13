@@ -23,8 +23,8 @@ if __name__ == '__main__':
     parser.add_argument("--resume_epoch", type=int, default=1, help="epoch to resume training")  # 重载训练，从之前中断处接着
     parser.add_argument("--batchsize", type=int, default=1, help="size of the batches")
 
-    parser.add_argument("--img_height", type=int, default=200, help="size of image sent to DNSR")
-    parser.add_argument("--img_width", type=int, default=200, help="size of image sent to DNSR")
+    parser.add_argument("--img_height", type=int, default=512, help="size of image sent to DNSR")
+    parser.add_argument("--img_width", type=int, default=512, help="size of image sent to DNSR")
 
     parser.add_argument("--optimizer", type=str, default="adam", help="['adam']adam ['sgd']sgd")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
