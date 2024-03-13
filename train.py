@@ -175,8 +175,8 @@ if __name__ == '__main__':
                     if idx % opt.save_checkpoint == 0 and idx > 0:
                         out_img = transforms.ToPILImage()(out[0])
                         inp_img = transforms.ToPILImage()(inp[0])
-                        wandb.log({"prediction_epoch{}_{}".format(epoch, idx): [wandb.Image(out_image)]})
-                        wandb.log({"orig_epoch{}_{}".format(epoch, idx): [wandb.Image(inp_image)]})
+                        wandb.log({"prediction_epoch{}_{}".format(epoch, idx): [wandb.Image(out_img)]})
+                        wandb.log({"orig_epoch{}_{}".format(epoch, idx): [wandb.Image(inp_img)]})
                                     
                     synthetic_mask = compute_shadow_mask_otsu(inp, out.clone().detach())
                     mask_loss = criterion_pixelwise(synthetic_mask, mask)
