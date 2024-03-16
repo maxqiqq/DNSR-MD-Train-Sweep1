@@ -1,5 +1,1 @@
-3.1  根据DNSR-MaterialData-sweep1-3090，现在colab上跑通UNet的modeltype
-
-在sweep1.yml中添加参数modeltype，设置“DistillBlock”和“UNET”
-
-然后租A100, 跑sweep
+3.16   取消分块使用下采样预处理，训练模型并调超参，至最优收敛。
