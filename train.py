@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument("--save_checkpoint", type=int, default=8, help="checkpoint for visual inspection") # valdataset中每个几个保存一下图片，尽量减少计算
     opt = parser.parse_args()
 
-    wandb.init(project="Train&Sweep1", config=vars(opt))
+    wandb.init(project="DNSR+MD-Train&Sweep1", config=vars(opt))
     wandb.config.update(opt)
 
     print('CUDA: ', torch.cuda.is_available(), torch.cuda.device_count())
