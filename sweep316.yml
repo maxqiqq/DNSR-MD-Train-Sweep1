@@ -2,28 +2,30 @@
 program: train.py
 
 # Grid, random or bayes
-method: bayes
+method: random
 
 # Project this sweep is part of
-project:  DNSR-MaterialData-sweep1
+project:  Train&Sweep1
 
 # Metric to optimize
 metric:
-  name: main/val_rmse
+  name: main/rmse
   goal: minimize
 
 # Parameters space to search
 parameters:
-  modeltype:
-    values: ['DB', 'UNET']
   optimizer:                              
     values: ['adam', 'sgd']
   lr:
-    values: [0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1]  
+    values: [0.0001, 0.001, 0.01, 0.1]  
   batchsize: 
-    values: [2, 4, 6]
+    values: [2, 4, 8, 16, 32]
+  img_size:
+    values: [512, 800, 1024]
   n_epochs:
-    value: 40
+    value: 50
+
+# 3.16开始写的，第一次sweep，共有120种组合
 
 
 
