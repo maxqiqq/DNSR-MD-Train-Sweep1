@@ -5,7 +5,7 @@ program: train.py
 method: random
 
 # Project this sweep is part of
-project:  Train&Sweep1
+project:  DNSR+MD-Train&Sweep1
 
 # Metric to optimize
 metric:
