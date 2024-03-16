@@ -19,12 +19,10 @@ os.environ['TORCH_HOME'] = "./loaded_models/"
 if __name__ == '__main__':
     # parse CLI arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--n_epochs", type=int, default=200, help="number of epochs of training")
+    parser.add_argument("--n_epochs", type=int, default=80, help="number of epochs of training")
     parser.add_argument("--resume_epoch", type=int, default=1, help="epoch to resume training")  # 重载训练，从之前中断处接着
     parser.add_argument("--batchsize", type=int, default=8, help="size of the batches")
-
-    parser.add_argument("--img_height", type=int, default=1024, help="size of image sent to DNSR")
-    parser.add_argument("--img_width", type=int, default=1024, help="size of image sent to DNSR")
+    parser.add_argument("--img_size", type=int, default=1024, help="size of image (height, width) sent to DNSR")
 
     parser.add_argument("--optimizer", type=str, default="adam", help="['adam']adam ['sgd']sgd")
     parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
@@ -46,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument("--save_checkpoint", type=int, default=8, help="checkpoint for visual inspection") # valdataset中每个几个保存一下图片，尽量减少计算
     opt = parser.parse_args()
 
-    wandb.init(project="DNSR-MaterialData-4500", config=vars(opt))
+    wandb.init(project="Train&Sweep1", config=vars(opt))
     wandb.config.update(opt)
 
     print('CUDA: ', torch.cuda.is_available(), torch.cuda.device_count())
@@ -72,11 +70,11 @@ if __name__ == '__main__':
     decay_step = (opt.n_epochs - opt.decay_epoch) // opt.decay_steps
     milestones = [me for me in range(opt.decay_epoch, opt.n_epochs, decay_step)] 
     scheduler = MultiStepLR(optimizer_G, milestones=milestones, gamma=opt.gamma)
-   
+
     Tensor = torch.cuda.FloatTensor
 
-    train_set = PairedImageSet('./MaterialData', 'train', use_mask=False, size=(opt.img_height, opt.img_width), aug=False)
-    val_set = PairedImageSet('./MaterialData', 'validation', use_mask=False, size=(opt.img_height, opt.img_width), aug=False)
+    train_set = PairedImageSet('./MaterialData', 'train', use_mask=False, size=(opt.img_size, opt.img_size), aug=False)
+    val_set = PairedImageSet('./MaterialData', 'validation', use_mask=False, size=(opt.img_size, opt.img_size), aug=False)
 
     dataloader = DataLoader(
         train_set,  
@@ -98,8 +96,8 @@ if __name__ == '__main__':
     wandb.define_metric("Epoch")
     wandb.define_metric("loss/*", step_metric="Epoch")
     wandb.define_metric("main/*", step_metric="Epoch")
-    wandb.define_metric("main/val_rmse", summary="min")
-    best_rmse = 50
+    wandb.define_metric("main/rmse", summary="min")
+    # best_rmse = 50
         
     for epoch in range(opt.resume_epoch, opt.n_epochs):
         train_loss = 0
@@ -198,8 +196,8 @@ if __name__ == '__main__':
              "loss/val_mask_loss": val_mask_loss,
              "loss/val_pix_loss": val_pix_loss,
              "loss/val_perc_loss": val_perc_loss,
-             "main/val_rmse": err_rmse,
-             "main/val_psnr": err_psnr,
+             "main/rmse": err_rmse,
+             "main/psnr": err_psnr,
              "Epoch": epoch
         })
 
@@ -207,9 +205,9 @@ if __name__ == '__main__':
                                                                                     epoch, train_loss, val_loss, err_rmse, err_psnr,
                                                                                     train_mask_loss, val_mask_loss))
         
-        if err_rmse < best_rmse and epoch > 1:
-            best_rmse = err_rmse
-            wandb.config.update({"best_rmse": best_rmse}, allow_val_change=True)
-            print("Saving checkpoint for epoch {} and RMSE {}".format(epoch, best_rmse))
-            torch.save(translator.cpu().state_dict(), "./best_rmse_model/distillnet_epoch{}.pth".format(epoch))
-            torch.save(optimizer_G.state_dict(), "./best_rmse_model/optimizer_epoch{}.pth".format(epoch))
+        # if err_rmse < best_rmse and epoch > 1:
+        #     best_rmse = err_rmse
+        #     wandb.config.update({"best_rmse": best_rmse}, allow_val_change=True)
+        #     print("Saving checkpoint for epoch {} and RMSE {}".format(epoch, best_rmse))
+        #     torch.save(translator.cpu().state_dict(), "./best_rmse_model/distillnet_epoch{}.pth".format(epoch))
+        #     torch.save(optimizer_G.state_dict(), "./best_rmse_model/optimizer_epoch{}.pth".format(epoch))
