@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument("--channels", type=int, default=3, help="number of image channels")
 
     parser.add_argument("--pixelwise_weight", type=float, default=1.0, help="Pixelwise loss weight")
-    parser.add_argument("--perceptual_weight", type=float, default=0.1, help="Perceptual loss weight")
+    parser.add_argument("--perceptual_weight", type=float, default=0.5, help="Perceptual loss weight")
     parser.add_argument("--mask_weight", type=float, default=0.02, help="mask loss weight")
 
     parser.add_argument("--val_checkpoint", type=int, default=1, help="checkpoint for validation")
