@@ -17,7 +17,7 @@ parameters:
   optimizer:                              
     values: ['adam', 'sgd']
   lr:
-    values: [0.00001, 0.0001, 0.001, 0.01]  
+    values: [0.00001, 0.0001, 0.001, 0.01, 0.1]  
   batchsize: 
     values: [2, 4, 8, 16, 32]
   img_size:
@@ -25,7 +25,7 @@ parameters:
   n_epochs:
     value: 50
 
-# 3.16开始写的，第一次sweep，共有120种组合
+# 3.16开始写的，第一次sweep，共有150种组合
 
 
 
