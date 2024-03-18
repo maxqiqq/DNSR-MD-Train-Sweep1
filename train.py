@@ -73,8 +73,8 @@ if __name__ == '__main__':
 
     Tensor = torch.cuda.FloatTensor
 
-    train_set = PairedImageSet('./MaterialData', 'train', use_mask=False, size=(opt.img_size, opt.img_size), aug=False)
-    val_set = PairedImageSet('./MaterialData', 'validation', use_mask=False, size=(opt.img_size, opt.img_size), aug=False)
+    train_set = PairedImageSet('./MaterialData-sweep', 'train', use_mask=False, size=(opt.img_size, opt.img_size), aug=False)
+    val_set = PairedImageSet('./MaterialData-sweep', 'validation', use_mask=False, size=(opt.img_size, opt.img_size), aug=False)
 
     dataloader = DataLoader(
         train_set,  
